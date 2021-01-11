@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:safetycheckconsulting/UI/custominputfield.dart';
-import 'package:http/http.dart';
-import 'dart:convert';
 import 'package:safetycheckconsulting/menu_screens/flha.dart';
 import 'package:safetycheckconsulting/menu_screens/hazardid.dart';
 import 'package:safetycheckconsulting/menu_screens/observations.dart';
@@ -24,10 +22,13 @@ class HomeScreen extends StatelessWidget {
 // I would like to create a database in the app that will only accept 1 row or record and will include
   // username, company, and password.  I can use this later to sync files with safetycheckconsulting.com
   // (localhost during development)
+  final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
+
   @override
   Widget build(BuildContext context) {
     // TODO: implement build
     return Scaffold(
+      key: _scaffoldKey,
       body: SingleChildScrollView(
         child: Container(
         width: MediaQuery
@@ -69,10 +70,35 @@ class HomeScreen extends StatelessWidget {
                     Container(
                       width: 150,
                       child: RaisedButton(onPressed: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(builder: (context) => WelcomeScreen()),
-                        );
+
+
+                        if(_usercontroller.text.isEmpty)
+                          {
+
+                            _scaffoldKey.currentState.showSnackBar(new SnackBar(content: new Text("Username cannot be empty")));
+
+                            print("Username cannot be empty");
+                          }
+                        else if(_companycontroller.text.isEmpty)
+                          {
+                            _scaffoldKey.currentState.showSnackBar(new SnackBar(content: new Text("Company cannot be empty")));
+                            print("Company cannot be empty");
+
+                          }
+                        else if(_passcontroller.text.isEmpty)
+                        {
+                          _scaffoldKey.currentState.showSnackBar(new SnackBar(content: new Text("Password cannot be empty")));
+
+                        }
+                        else
+                          {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(builder: (context) => WelcomeScreen()),
+                            );
+                          }
+
+
                       },
                         color: Colors.blue[900],
                         textColor: Colors.white,
