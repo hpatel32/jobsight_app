@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:path/path.dart';
+import 'package:sqflite/sqflite.dart';
 
 class Observations extends StatefulWidget {
   @override
@@ -8,6 +10,8 @@ class Observations extends StatefulWidget {
 
 
 class _AddObservationsState extends State<Observations> {
+  final _datecontroller = TextEditingController();
+
   String _routineValue = "Yes";
   String _competentValue = "Select";
   bool rushVal = false;
@@ -167,14 +171,34 @@ class _AddObservationsState extends State<Observations> {
                 Row(
                   children: <Widget>[
                     Container(width: 125,
-                      child: TextField(
-                        style: TextStyle(
-                          fontSize: 14.0,
+                      child: GestureDetector(
+                        onTap: () {
+                          showDatePicker(
+                              context: context,
+                              initialDate: DateTime.now(),
+                              firstDate: DateTime(2001),
+                              lastDate: DateTime(2022))
+                              .then((value) {
+                            print(value);
+                            setState(() {
+                              _datecontroller.text = value.toString().substring(0, 10);
+                            });
+                          });
+                        },
+                        child: Container(
+                          width: 100,
+                          child: TextField(
+                            enabled: false,
+                            controller: _datecontroller,
+                            style: TextStyle(
+                              fontSize: 12.0,
+                            ),
+                            decoration: InputDecoration(
+                              labelText: "Date:",
+                            ),
+                            // controller: _dateController,  need to include this later
+                          ),
                         ),
-                        decoration: InputDecoration(
-                          labelText: "Date:",
-                        ),
-                        // controller: _dateController,  need to include this later
                       ),
                     ),
                     SizedBox(width: 15),
